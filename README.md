@@ -29,4 +29,4 @@
 <p>$ dotnet run</p>
 
 ### ` 🌐 Referências`
-    * Artigo do Renato Groffe: https://renatogroffe.medium.com/asp-net-core-xunit-github-actions-automatizando-testes-build-e-deployment-de-web-apps-1dc55c9ce564
+    <p>* Artigo do Renato Groffe: https://renatogroffe.medium.com/asp-net-core-xunit-github-actions-automatizando-testes-build-e-deployment-de-web-apps-1dc55c9ce564</p>
