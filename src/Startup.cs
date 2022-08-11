@@ -10,6 +10,7 @@ using MeuTodo.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -97,7 +98,7 @@ namespace MeuTodo
 
             services.AddTransient<GlobalExceptionHandlerMiddleware>();
 
-            services.AddDbContext<AppDataContext>();
+            services.AddDbContext<AppDataContext>(x => x.UseSqlite("DataSource=app.db;Cache=Shared"));
 
             services.AddScoped<IRepository, UserRepository>();
         }
