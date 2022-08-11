@@ -43,9 +43,11 @@
 
 ### ` 🌐 Referências`
 
-<p>* Testes de APIs REST com .NET 5, xUnit, Refit e Fluent Assertions (artigo): https://renatogroffe.medium.com/asp-net-core-xunit-github-actions-automatizando-testes-build-e-deployment-de-web-apps-1dc55c9ce564</p>
+<p>* ASP.NET Core + xUnit + GitHub Actions: automatizando testes, build e deployment de Web Apps: https://renatogroffe.medium.com/asp-net-core-xunit-github-actions-automatizando-testes-build-e-deployment-de-web-apps-1dc55c9ce564</p>
 
 <p>* Testes de APIs REST com .NET 5, xUnit, Refit e Fluent Assertions (artigo) : https://renatogroffe.medium.com/testes-de-apis-rest-com-net-5-xunit-refit-e-fluent-assertions-633128a9624f</p>
+
+<p>* ASP.NET Core + JWT + Refit: consumindo uma API protegida de forma descomplicada (artigo): https://imasters.com.br/asp/asp-net-core-jwt-refit-consumindo-uma-api-protegida-de-forma-descomplicada</p>
 
 <p>* Integration Testing in ASP.NET Core (artigo): https://code-maze.com/aspnet-core-integration-testing/</p>
 
