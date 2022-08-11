@@ -8,5 +8,7 @@ namespace MeuTodo.Models
         public string Title { get; set; }
         public bool Done { get; set; }
         public DateTime Date { get; set; } = DateTime.Now;
+
+        public void UpdateTitle(string title) => this.Title = title;
     }
 }
