@@ -8,6 +8,8 @@ namespace MeuTodo.Configuration
     {
         public static async Task TestConnection(DbContext context)
         {
+            if (context.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory") return;
+
             var maxAttemps = 10;
 
             var delay = 5000;
