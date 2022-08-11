@@ -1,49 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
-using MeuTodo.Data;
 using MeuTodo.Models;
+using MeuTodo.Repositorio.Interfaces;
 using MeuTodo.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace MeuTodo.Controllers
 {
     [ApiController]
     [Route("v1")]
+    [Authorize]
     public class TodoController : ControllerBase
     {
-        private readonly AppDataContext _context;
+        private readonly IRepository _repository;
 
-        public TodoController(AppDataContext context) => _context = context;
+        public TodoController(IRepository repository) => _repository = repository;
 
         /// <summary>
-        /// Obter todas as tarefas
+        /// Get all todos
         /// </summary>
         /// <returns></returns>
         [HttpGet]
         [Route("todos")]
-        public async Task<ActionResult<List<Todo>>> GetAllTodosAsync() => await _context.Todos.AsNoTracking().ToListAsync();
+        public async Task<ActionResult<List<Todo>>> GetAllTodosAsync() => await _repository.GetAllTodosAsync();
 
 
         /// <summary>
-        /// Obter tarefa por id
+        /// Get todo by id
         /// </summary>
-        /// <param name="id">Id da tarefa</param>
+        /// <param name="id">Todo id</param>
         /// <returns></returns>
         [HttpGet]
         [Route("todos/{id}")]
-        public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
+        public async Task<ActionResult<Todo>> GetByIdAsync([FromRoute] int id)
         {
-            var todo = await _context.Todos.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            var todo = await _repository.GetTodoByIdAsync(id);
 
-            return todo == null? NotFound(): Ok(todo);
+            return todo == null? NotFound("Todo not found"): Ok(todo);
         }
         
 
         /// <summary>
-        /// Rotina para criar tarefa
+        /// Create todo
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -59,65 +59,50 @@ namespace MeuTodo.Controllers
                 Title = model.Title
             };
 
-            try
-            {
-                await _context.Todos.AddAsync(todo);
+            await _repository.PostTodoAsync(todo);
 
-                await _context.SaveChangesAsync();
-
-                return Created($"v1/todos/{todo.Id}", todo);
-            }
-            catch (Exception) { return BadRequest(); }
+            return Created($"v1/todos/{todo.Id}", todo);
         }
         
+        
         /// <summary>
-        /// Rotina para atualizar tarefa
+        /// Update todo
         /// </summary>
         /// <param name="model"></param>
-        /// <param name="id">Id da tarefa</param>
+        /// <param name="id">Todo id</param>
         /// <returns></returns>
         [HttpPut("todos/{id}")]
-        public async Task<IActionResult> PutAsync([FromBody] CreateTodoViewModel model, [FromRoute] int id)
+        public async Task<ActionResult<Todo>> PutAsync([FromBody] CreateTodoViewModel model, [FromRoute] int id)
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            var todo = await _context.Todos.FirstOrDefaultAsync(x => x.Id == id);
+            var todo = await _repository.GetTodoByIdAsync(id);
 
-            if (todo == null) return NotFound();
+            if(todo == null) return NotFound("Todo not found");
 
-            try
-            {
-                todo.Title = model.Title;
-                
-                _context.Todos.Update(todo);
+            todo.UpdateTitle(model.Title);
+            
+            await _repository.UpdateTodoAsync(todo);
 
-                await _context.SaveChangesAsync();
-
-                return Ok(todo);
-            }
-            catch (Exception){ return BadRequest(); }
+            return Ok(todo);
         }
 
+
         /// <summary>
-        /// Rotina para deletar tarefa
+        /// Delete todo
         /// </summary>
-        /// <param name="id">Id da tarefa</param>
+        /// <param name="id">Todo id</param>
         /// <returns></returns>
         [HttpDelete("todos/{id}")]
         public async Task<IActionResult> DeleteAsync([FromRoute] int id)
         {
-            var todo = await _context.Todos.FirstOrDefaultAsync(x => x.Id == id);
+            var todo = await _repository.GetTodoByIdAsync(id);
 
-            try
-            {
-                _context.Todos.Remove(todo);
+            if(todo == null) return NotFound("Todo not found");
 
-                await _context.SaveChangesAsync();
+            await _repository.DeleteTodoAsync(todo);
 
-                return Ok();
-            }
-            catch (Exception){ return BadRequest(); }
-        }
-        
+            return Ok();
+        }  
     }
 }
