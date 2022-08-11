@@ -17,6 +17,17 @@
 * CI/CD
 * DevOps
 * GitHub Actions
+* Global Exception Handler Middleware
+* HealthCheckers
+* EnsureSeed Data
+* Repository Pattern
+* Migrations
+* API Data Driven
+* JWT Bearer
+* Autenticação e autorização
+* Swagger
+* Native Dependency Injection
+* Integration Tests
 
 ### `🔎 Como utilizar?`
 
