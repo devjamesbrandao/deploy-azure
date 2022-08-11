@@ -1,11 +1,11 @@
 using System;
 using System.Threading.Tasks;
 using MeuTodo.Data;
+using MeuTodo.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace MeuTodo.Configuration
 {
@@ -28,7 +28,20 @@ namespace MeuTodo.Configuration
 
             await DbHealthChecker.TestConnection(context);
 
-            if (env.IsDevelopment()) await context.Database.MigrateAsync();
+            await context.Database.MigrateAsync();
+
+            await EnsureSeedUsers(context);
+        }
+
+        private static async Task EnsureSeedUsers(AppDataContext context)
+        {
+            if(await context.Users.AnyAsync()) return;
+
+            await context.Users.AddAsync(new User(){ Id = 1, Name = "Naruto", Password = "Lamem"});
+
+            await context.Users.AddAsync(new User() { Id = 2, Name = "Sakura ", Password = "Sasuke"});
+
+            await context.SaveChangesAsync();
         }
 
     }
