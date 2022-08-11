@@ -3,7 +3,7 @@
 <hr/>
 
 <p align="center">
-    <img src="/img/capa.png" alt="Descrição do Deploy" title="Descrição do Deploy">
+    <img src="/src/img/capa.png" alt="Descrição do Deploy" title="Descrição do Deploy">
 </p> 
 
 ### ` 🔍 Sobre`
