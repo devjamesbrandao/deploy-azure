@@ -28,7 +28,9 @@ namespace MeuTodo.Configuration
 
             await DbHealthChecker.TestConnection(context);
 
-            await context.Database.MigrateAsync();
+            await context.Database.EnsureDeletedAsync();
+
+            await context.Database.EnsureCreatedAsync();
 
             await EnsureSeedUsers(context);
         }
