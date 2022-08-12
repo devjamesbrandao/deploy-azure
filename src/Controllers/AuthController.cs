@@ -3,6 +3,7 @@ using MeuTodo.Configuration;
 using MeuTodo.Repositorio.Interfaces;
 using MeuTodo.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using src.Models;
 
 namespace MeuTodo.Controllers
 {
@@ -15,8 +16,8 @@ namespace MeuTodo.Controllers
         public AuthController(IRepository repository) => _repository = repository;
 
 
-        [HttpPost]
-        public async Task<IActionResult> LoginAsync([FromBody] LoginUserViewModel login)
+        [HttpPost("login")]
+        public async Task<ActionResult<TokenUser>> LoginAsync([FromBody] LoginUserViewModel login)
         {
             if (!ModelState.IsValid) return BadRequest();
 
@@ -24,7 +25,7 @@ namespace MeuTodo.Controllers
 
             if(user is null) return NotFound("User not found");
 
-            return Ok(new { UserName = user.Name, Token = JwtToken.GenerateToken(user) });
+            return Ok(new TokenUser(){ UserName = user.Name, Token = JwtToken.GenerateToken(user) });
         }
     }
 }
