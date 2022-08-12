@@ -45,6 +45,8 @@
 
 <p>* ASP.NET Core + xUnit + GitHub Actions: automatizando testes, build e deployment de Web Apps: https://renatogroffe.medium.com/asp-net-core-xunit-github-actions-automatizando-testes-build-e-deployment-de-web-apps-1dc55c9ce564</p>
 
+<p>.NET 5: automatizando build, testes e deployment de APIs REST com GitHub Actions (artigo): https://renatogroffe.medium.com/net-5-automatizando-build-testes-e-deployment-de-apis-rest-com-github-actions-10dc3af55e4b</p>
+
 <p>* Testes de APIs REST com .NET 5, xUnit, Refit e Fluent Assertions (artigo) : https://renatogroffe.medium.com/testes-de-apis-rest-com-net-5-xunit-refit-e-fluent-assertions-633128a9624f</p>
 
 <p>* ASP.NET Core + JWT + Refit: consumindo uma API protegida de forma descomplicada (artigo): https://imasters.com.br/asp/asp-net-core-jwt-refit-consumindo-uma-api-protegida-de-forma-descomplicada</p>
