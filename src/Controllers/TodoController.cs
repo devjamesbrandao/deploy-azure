@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace MeuTodo.Controllers
 {
     [ApiController]
-    [Route("v1")]
+    [Route("api/[controller]")]
     [Authorize]
     public class TodoController : ControllerBase
     {
