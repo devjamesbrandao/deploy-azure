@@ -14,6 +14,8 @@ namespace Tests.Integration
     public class TodoControllerIntegrationTest : IClassFixture<TestingWebAppFactory<Startup>>
     {
         private readonly ILoginAPI _authTodo;
+
+        private readonly ITodo _todos;
         
         private readonly HttpClient _client;
 
@@ -32,36 +34,46 @@ namespace Tests.Integration
 
             var configuration = builder.Build();
 
-            _authTodo = RestService.For<ILoginAPI>(configuration.GetSection("UrlWebAppTestes").Value);
-
             UserName = configuration.GetSection("APITodos_Access:Name").Value;
 
             Password = configuration.GetSection("APITodos_Access:Password").Value;
+
+            _authTodo = RestService.For<ILoginAPI>(configuration.GetSection("UrlWebAppTestes").Value);
+
+            var token = _authTodo.PostLogin(
+                new LoginUserViewModel()
+                {
+                    Name = UserName,
+                    Password = Password
+                }
+            ).Result;
+
+            _todos = RestService.For<ITodo>(
+                configuration.GetSection("UrlWebAppTestes").Value,
+                new RefitSettings()
+                {
+                    AuthorizationHeaderValueGetter = () => Task.FromResult(token.Token)
+                }
+            );
+
+            TokenJWT = token.Token;
 
             // Artifice to add InMemoryDbContext
             _client = factory.CreateClient();
         }
 
         [Fact, Priority(1)]
-        public async Task Get_JWT_Token_With_Success()
+        public void JWT_Token_Should_Be_Valida()
         {
-            var token = await _authTodo.PostLogin(
-                new LoginUserViewModel()
-                {
-                    Name = UserName,
-                    Password = Password
-                }
-            );
-
-            TokenJWT = token.Token;
-
-            token.Token.Should().NotBeEmpty(because: "API require this JWT Token");
+            TokenJWT.Should().NotBeEmpty(because: "API require this JWT Token");
         }
 
         [Fact, Priority(2)]
-        public void Get_Unauthorized_wheh_Get_All_Todos()
+        public async Task Get_OK_wheh_Get_All_Todos()
         {
-            Assert.True(true);
+            var todos = await _todos.GetAllTodosAsync();
+
+            todos.StatusCode.Should().Be(HttpStatusCode.OK);
         }
     }
 }
