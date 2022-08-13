@@ -89,23 +89,33 @@ namespace Tests.Integration
         }
 
         [Fact, Priority(3)]
+        public async Task Create_Todo_Return_Bad_Request()
+        {
+            var todo = new CreateTodoViewModel();
+
+            var createdTodo = await _todos.PostTodoAsync(todo);
+
+            createdTodo.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
+        [Fact, Priority(4)]
         public async Task Get_Created_Todo_With_Success()
         {
-            var todo = await _todos.GetTodoByIdAsync(2);
+            var todo = await _todos.GetTodoByIdAsync(1);
 
             todo.StatusCode.Should().Be(HttpStatusCode.OK);
 
             todo.Content.Should().BeAssignableTo<Todo>();
         }
 
-        [Fact, Priority(4)]
+        [Fact, Priority(5)]
         public async Task Get_Todo_Not_Found()
         {
             var todo = await _todos.GetTodoByIdAsync(2);
 
             todo.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
-            todo.ReasonPhrase.Should().Be("Todo not found");
+            todo.ReasonPhrase.Should().Contain("Not");
         }
     }
 }
