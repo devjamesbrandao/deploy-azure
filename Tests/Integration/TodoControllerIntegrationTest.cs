@@ -105,7 +105,7 @@ namespace Tests.Integration
 
             todo.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
-            todo.Content.Should().Be("Todo not found");
+            todo.ReasonPhrase.Should().Be("Todo not found");
         }
     }
 }
