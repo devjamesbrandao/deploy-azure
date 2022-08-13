@@ -145,7 +145,7 @@ namespace Tests.Integration
             putTodo.Content.Should().Be(null);
         }
 
-        [Fact, Priority(7)]
+        [Fact, Priority(8)]
         public async Task Put_Todo_With_Success()
         {
             var todo = new CreateTodoViewModel()
@@ -160,6 +160,42 @@ namespace Tests.Integration
             putTodo.Content.Should().BeAssignableTo<Todo>();
 
             putTodo.Content.Title.Should().Be("Learning Integration Tests in ASP.NET Core 6.0");
+        }
+
+        [Fact, Priority(9)]
+        public async Task Delete_Todo_Return_Not_Found()
+        {
+            var deletedTodo = await _todos.DeleteTodoAsync(2);
+
+            deletedTodo.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
+        [Fact, Priority(10)]
+        public async Task Get_All_Todos_At_Least_One_Todo()
+        {
+            var todos = await _todos.GetAllTodosAsync();
+
+            todos.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            todos.Content.Count.Should().Be(1);
+        }
+
+        [Fact, Priority(11)]
+        public async Task Delete_Todo_With_Success()
+        {
+            var deletedTodo = await _todos.DeleteTodoAsync(1);
+
+            deletedTodo.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+
+        [Fact, Priority(12)]
+        public async Task Get_All_Todos_No_Todos()
+        {
+            var todos = await _todos.GetAllTodosAsync();
+
+            todos.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            todos.Content.Count.Should().Be(0);
         }
     }
 }
