@@ -24,6 +24,6 @@ namespace Tests.HttpClients
 
         [Delete("/api/todo/todos/{id}")]
         [Headers("Authorization: Bearer")]
-        Task DeleteTodoAsync([Body] CreateTodoViewModel todo, int id);
+        Task<ApiResponse<dynamic>> DeleteTodoAsync(int id);
     }
 }
