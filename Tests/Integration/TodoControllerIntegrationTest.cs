@@ -97,5 +97,15 @@ namespace Tests.Integration
 
             todo.Content.Should().Be("Todo not found");
         }
+
+        [Fact, Priority(4)]
+        public async Task Get_Todo_Not_Found()
+        {
+            var todo = await _todos.GetTodoByIdAsync(2);
+
+            todo.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            todo.Content.Should().BeAssignableTo<Todo>();
+        }
     }
 }
