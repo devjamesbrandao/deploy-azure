@@ -144,5 +144,22 @@ namespace Tests.Integration
 
             putTodo.Content.Should().Be(null);
         }
+
+        [Fact, Priority(7)]
+        public async Task Put_Todo_With_Success()
+        {
+            var todo = new CreateTodoViewModel()
+            {
+                Title = "Learning Integration Tests in ASP.NET Core 6.0"
+            };
+
+            var putTodo = await _todos.PutTodoAsync(todo, 1);
+
+            putTodo.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            putTodo.Content.Should().BeAssignableTo<Todo>();
+
+            putTodo.Content.Title.Should().Be("Learning Integration Tests in ASP.NET Core 6.0");
+        }
     }
 }
