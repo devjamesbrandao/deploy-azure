@@ -5,6 +5,7 @@ using MeuTodo.Models;
 using MeuTodo.Repositorio.Interfaces;
 using MeuTodo.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MeuTodo.Controllers
@@ -21,9 +22,14 @@ namespace MeuTodo.Controllers
         /// <summary>
         /// Get all todos
         /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("todos")]
+        /// <remarks>
+        /// Requisition example:
+        /// 
+        ///     [GET] api/todo/todos
+        /// </remarks>
+        [HttpGet("todos")]
+        [ProducesResponseType(typeof(List<Todo>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<List<Todo>>> GetAllTodosAsync() => await _repository.GetAllTodosAsync();
 
 
@@ -31,9 +37,15 @@ namespace MeuTodo.Controllers
         /// Get todo by id
         /// </summary>
         /// <param name="id">Todo id</param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("todos/{id}")]
+        /// <remarks>
+        /// Requisition example:
+        /// 
+        ///     [GET] api/todo/todos/1
+        /// </remarks>
+        [HttpGet("todos/{id}")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(Todo), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<Todo>> GetByIdAsync([FromRoute] int id)
         {
             var todo = await _repository.GetTodoByIdAsync(id);
@@ -46,8 +58,18 @@ namespace MeuTodo.Controllers
         /// Create todo
         /// </summary>
         /// <param name="model"></param>
-        /// <returns></returns>
+        /// <remarks>
+        /// Requisition example:
+        /// 
+        ///     [POST] api/todo/todos
+        ///     {        
+        ///       "title": "Learning Azure DevOps"     
+        ///     }
+        /// </remarks>
         [HttpPost("todos")]
+        [ProducesResponseType(typeof(Todo), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> PostAsync([FromBody] CreateTodoViewModel model)
         {
             if (!ModelState.IsValid) return BadRequest();
@@ -70,8 +92,18 @@ namespace MeuTodo.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <param name="id">Todo id</param>
-        /// <returns></returns>
+        /// <remarks>
+        /// Requisition example:
+        /// 
+        ///     [PUT] api/todo/todos/1
+        ///     {        
+        ///       "title": "Learning Azure DevOps and Github Actions"     
+        ///     }
+        /// </remarks>
         [HttpPut("todos/{id}")]
+        [ProducesResponseType(typeof(Todo), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<Todo>> PutAsync([FromBody] CreateTodoViewModel model, [FromRoute] int id)
         {
             if (!ModelState.IsValid) return BadRequest();
@@ -92,8 +124,12 @@ namespace MeuTodo.Controllers
         /// Delete todo
         /// </summary>
         /// <param name="id">Todo id</param>
-        /// <returns></returns>
+        /// 
+        ///     [DELETE] api/todo/todos/1
         [HttpDelete("todos/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteAsync([FromRoute] int id)
         {
             var todo = await _repository.GetTodoByIdAsync(id);
