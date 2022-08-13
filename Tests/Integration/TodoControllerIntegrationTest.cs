@@ -1,6 +1,7 @@
 using System.Net;
 using FluentAssertions;
 using MeuTodo;
+using MeuTodo.Models;
 using MeuTodo.ViewModels;
 using Microsoft.Extensions.Configuration;
 using Refit;
@@ -69,11 +70,22 @@ namespace Tests.Integration
         }
 
         [Fact, Priority(2)]
-        public async Task Get_OK_wheh_Get_All_Todos()
+        public async Task Create_Todo_With_Success()
         {
-            var todos = await _todos.GetAllTodosAsync();
+            var todo = new CreateTodoViewModel
+            {
+                Title = "Learning Integration Tests in ASP.NET Core"
+            };
 
-            todos.StatusCode.Should().Be(HttpStatusCode.OK);
+            var createdTodo = await _todos.PostTodoAsync(todo);
+
+            createdTodo.StatusCode.Should().Be(HttpStatusCode.Created);
+
+            createdTodo.Content.Should().BeAssignableTo<Todo>();
+
+            createdTodo.Content.Done.Should().BeFalse();
+
+            createdTodo.Content.Title.Should().Be(todo.Title);
         }
     }
 }
