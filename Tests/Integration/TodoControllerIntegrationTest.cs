@@ -93,9 +93,9 @@ namespace Tests.Integration
         {
             var todo = await _todos.GetTodoByIdAsync(2);
 
-            todo.StatusCode.Should().Be(HttpStatusCode.NotFound);
+            todo.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            todo.Content.Should().Be("Todo not found");
+            todo.Content.Should().BeAssignableTo<Todo>();
         }
 
         [Fact, Priority(4)]
@@ -103,9 +103,9 @@ namespace Tests.Integration
         {
             var todo = await _todos.GetTodoByIdAsync(2);
 
-            todo.StatusCode.Should().Be(HttpStatusCode.OK);
+            todo.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
-            todo.Content.Should().BeAssignableTo<Todo>();
+            todo.Content.Should().Be("Todo not found");
         }
     }
 }
