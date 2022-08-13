@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using MeuTodo.Configuration;
 using MeuTodo.Repositorio.Interfaces;
 using MeuTodo.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using src.Models;
 
@@ -15,8 +16,24 @@ namespace MeuTodo.Controllers
 
         public AuthController(IRepository repository) => _repository = repository;
 
-
+        /// <summary>
+        /// Login
+        /// </summary>
+        /// <param name="login"></param>
+        /// <remarks>
+        /// Requisition example:
+        /// 
+        ///     [POST] api/auth/login
+        ///     {        
+        ///       "name": "Naruto",
+        ///       "Password": "Lamem"        
+        ///     }
+        /// </remarks>
         [HttpPost("login")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(TokenUser), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<TokenUser>> LoginAsync([FromBody] LoginUserViewModel login)
         {
             if (!ModelState.IsValid) return BadRequest();
