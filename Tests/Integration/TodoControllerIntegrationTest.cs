@@ -70,7 +70,7 @@ namespace Tests.Integration
         }
 
         [Fact, Priority(2)]
-        public async Task Create_Todo_With_Success()
+        public async Task Post_Todo_With_Success()
         {
             var todo = new CreateTodoViewModel
             {
@@ -89,7 +89,7 @@ namespace Tests.Integration
         }
 
         [Fact, Priority(3)]
-        public async Task Create_Todo_Return_Bad_Request()
+        public async Task Post_Todo_Return_Bad_Request()
         {
             var todo = new CreateTodoViewModel();
 
@@ -99,7 +99,7 @@ namespace Tests.Integration
         }
 
         [Fact, Priority(4)]
-        public async Task Get_Created_Todo_With_Success()
+        public async Task Get_Todo_By_Id_With_Success()
         {
             var todo = await _todos.GetTodoByIdAsync(1);
 
@@ -109,13 +109,25 @@ namespace Tests.Integration
         }
 
         [Fact, Priority(5)]
-        public async Task Get_Todo_Not_Found()
+        public async Task Get_Todo_By_Id_Not_Found()
         {
             var todo = await _todos.GetTodoByIdAsync(2);
 
             todo.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
             todo.ReasonPhrase.Should().Contain("Not");
+        }
+
+        [Fact, Priority(6)]
+        public async Task Put_Todo_Return_Bad_Request()
+        {
+            var todo = new CreateTodoViewModel();
+
+            var putTodo = await _todos.PutTodoAsync(todo, 1);
+
+            putTodo.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+            putTodo.Content.Should().Be(null);
         }
     }
 }
