@@ -87,5 +87,15 @@ namespace Tests.Integration
 
             createdTodo.Content.Title.Should().Be(todo.Title);
         }
+
+        [Fact, Priority(3)]
+        public async Task Get_Created_Todo_With_Success()
+        {
+            var todo = await _todos.GetTodoByIdAsync(2);
+
+            todo.StatusCode.Should().Be(HttpStatusCode.NotFound);
+
+            todo.Content.Should().Be("Todo not found");
+        }
     }
 }
