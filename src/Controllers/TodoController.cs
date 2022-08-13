@@ -124,8 +124,11 @@ namespace MeuTodo.Controllers
         /// Delete todo
         /// </summary>
         /// <param name="id">Todo id</param>
+        /// <remarks>
+        /// Requisition example:
         /// 
         ///     [DELETE] api/todo/todos/1
+        /// </remarks>
         [HttpDelete("todos/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
