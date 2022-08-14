@@ -23,7 +23,7 @@
 * DevOps
 * GitHub Actions
 * Global Exception Handler Middleware
-* HealthCheckers
+* Health Checkers
 * Ensure Seed Data
 * Repository Pattern
 * Migrations
@@ -33,8 +33,7 @@
 * Swagger
 * Native Dependency Injection
 * Integration Tests
-
-### ` 📖📚📜 Notas`
+* Logs com Serilog
 
 ### `🔎 Como utilizar?`
 
@@ -54,6 +53,8 @@
 - <p> ASP.NET Core + xUnit + GitHub Actions: automatizando testes, build e deployment de Web Apps: https://renatogroffe.medium.com/asp-net-core-xunit-github-actions-automatizando-testes-build-e-deployment-de-web-apps-1dc55c9ce564</p>
 
 - <p> Integration Testing in ASP.NET Core: https://code-maze.com/aspnet-core-integration-testing/</p>
+
+- <p> Serilog In ASP.NET Core 3.1: https://www.c-sharpcorner.com/article/serilog-in-asp-net-core-3-1/</p>
 
 - <p> Testes de APIs REST com .NET 5, xUnit, Refit e Fluent Assertions: https://renatogroffe.medium.com/testes-de-apis-rest-com-net-5-xunit-refit-e-fluent-assertions-633128a9624f</p>
 
