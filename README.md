@@ -3,7 +3,11 @@
 <hr/>
 
 <p align="center">
-    <img src="/src/img/capa.png" alt="Descrição do Deploy" title="Descrição do Deploy">
+    <a href="https://renatogroffe.medium.com/asp-net-core-xunit-github-actions-automatizando-testes-build-e-deployment-de-web-apps-1dc55c9ce564"><img src="/src/img/capa.png" alt="Descrição do Deploy" title="Descrição do Deploy"></a>
+</p> 
+
+<p align="center">
+    <img src="/src/img/fluxo.png" alt="Fluxo de desenvolvimento de deploy" title="Fluxo de desenvolvimento de deploy">
 </p> 
 
 ### ` 🔍 Sobre`
