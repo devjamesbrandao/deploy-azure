@@ -3,7 +3,7 @@
 <hr/>
 
 <p align="center">
-    <a href="https://blog.bitsrc.io/using-github-actions-with-azure-app-services-for-web-apps-1d3333c391d4"><img src="/src/img/fluxo.png" alt="Fluxo de desenvolvimento de deploy" title="Fluxo de desenvolvimento de deploy"></a>
+    <a href="https://blog.bitsrc.io/using-github-actions-with-azure-app-services-for-web-apps-1d3333c391d4"><img src="/src/img/fluxo.png" alt="Fluxo de desenvolvimento e de deploy" title="Fluxo de desenvolvimento e de deploy"></a>
 </p> 
 
 <p align="center">
@@ -13,7 +13,7 @@
 
 ### ` 🔍 Sobre`
 
-<p align="justify">Deploy de API ASP.NET CORE, EF Core e SQL Lite no Azure por meio da ferramenta GitHub Actions</p>
+<p align="justify">Deploy de API ASP.NET CORE com EF Core e SQL Lite no Azure por meio da ferramenta GitHub Actions</p>
 
 ### ` 💡 Tópicos abordados`
 * Azure
