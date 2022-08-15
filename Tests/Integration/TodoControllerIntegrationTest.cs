@@ -40,7 +40,9 @@ namespace Tests.Integration
             Password = configuration.GetSection("APITodos_Access:Password").Value;
 
             _authTodo = RestService.For<ILoginAPI>(configuration.GetSection("UrlWebAppTestes").Value);
-
+                
+            Console.WriteLine(configuration.GetSection("UrlWebAppTestes").Value);
+                
             var token = _authTodo.PostLogin(
                 new LoginUserViewModel()
                 {
