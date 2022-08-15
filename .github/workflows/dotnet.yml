@@ -51,43 +51,9 @@ jobs:
       - name: Login no Azure
         uses: Azure/login@v1.1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS_WEBAPP_TESTES }}
-
-      - name: Deployment no Azure App Service (Ambiente de Testes)
-        uses: Azure/webapps-deploy@v2
-        with:
-          app-name: ${{ env.NOME_WEBAPP_TESTES_AZURE }}
-          package: ${{ env.NOME_DIR_PUBLICACAO }}
-
-  tests-api:
-    needs: [deployment-api-test-env]
-
-    runs-on: ubuntu-latest
-    
-    steps:
-      - uses: actions/checkout@v2
-        
-      - name: Executar testes automatizados
-        run: dotnet test ${{ env.CAMINHO_PROJETO_TESTES }} --verbosity minimal
-
-  deployment-api-prod-env:
-    needs: [tests-api]
-
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Download do Artifact contendo a Publicação
-        uses: actions/download-artifact@v2.0.8
-        with:
-          name: ${{ env.NOME_ARTIFACT_PUBLICACAO }}
-          path: ${{ env.NOME_DIR_PUBLICACAO }}
-    
-      - name: Login no Azure
-        uses: Azure/login@v1.1
-        with:
           creds: ${{ secrets.AZURE_CREDENTIALS_WEBAPP_PRODUCAO }}
 
-      - name: Deployment no Azure App Service (Ambiente de Produção)
+      - name: Deployment no Azure App Service (Ambiente de Testes)
         uses: Azure/webapps-deploy@v2
         with:
           app-name: ${{ env.NOME_WEBAPP_PRODUCAO_AZURE }}
