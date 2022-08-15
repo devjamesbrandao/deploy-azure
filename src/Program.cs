@@ -35,7 +35,7 @@ namespace MeuTodo
                 .UseSerilog()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseUrls("http://localhost:5000");
+                    // webBuilder.UseUrls("http://localhost:5000");
                     webBuilder.UseStartup<Startup>();
                 });
     }
