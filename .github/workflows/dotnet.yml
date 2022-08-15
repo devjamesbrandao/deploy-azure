@@ -11,7 +11,7 @@ env:
   CAMINHO_PROJETO_TESTES: ./Tests/Tests.csproj
   NOME_DIR_PUBLICACAO: app
   NOME_ARTIFACT_PUBLICACAO: Publicacao PrimeiroDeploy
-  NOME_WEBAPP_PRODUCAO_AZURE: jamesprimeirodeploy
+  NOME_WEBAPP_PRODUCAO_AZURE: jamesapideploy
   NOME_WEBAPP_TESTES_AZURE: jamesprimeirodeploy-testes
   UrlWebAppTestes: https://jamesprimeirodeploy-testes.azurewebsites.net
 
