@@ -8,7 +8,7 @@ on:
 
 env:
   CAMINHO_PROJETO_WEBAPP: ./src
-  CAMINHO_PROJETO_TESTES: ./Tests
+  CAMINHO_PROJETO_TESTES: ./Tests/Tests.csproj
   NOME_DIR_PUBLICACAO: app
   NOME_ARTIFACT_PUBLICACAO: Publicacao PrimeiroDeploy
   NOME_WEBAPP_PRODUCAO_AZURE: jamesprimeirodeploy
