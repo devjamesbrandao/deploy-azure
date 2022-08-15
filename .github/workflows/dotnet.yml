@@ -1,0 +1,94 @@
+name: .NET 6 + Testes de API REST + Artifacts + Azure App Service 
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  CAMINHO_PROJETO_WEBAPP: ./src
+  CAMINHO_PROJETO_TESTES: ./Tests
+  NOME_DIR_PUBLICACAO: app
+  NOME_ARTIFACT_PUBLICACAO: Publicacao PrimeiroDeploy
+  NOME_WEBAPP_PRODUCAO_AZURE: jamesprimeirodeploy
+  NOME_WEBAPP_TESTES_AZURE: jamesprimeirodeploy-testes
+  UrlWebAppTestes: https://jamesprimeirodeploy-testes.azurewebsites.net
+
+jobs:
+  build-api:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup .NET 6
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+
+    - name: Build + Publish com o utilitario dotnet
+      run: dotnet publish ${{ env.CAMINHO_PROJETO_WEBAPP }} -c Release -o ${{ env.NOME_DIR_PUBLICACAO }}
+
+    - name: Upload da Publicação como Artifact
+      uses: actions/upload-artifact@v2.2.2
+      with:
+        name: ${{ env.NOME_ARTIFACT_PUBLICACAO }}
+        path: ${{ env.NOME_DIR_PUBLICACAO }}
+
+  deployment-api-test-env:
+    needs: [build-api]
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download do Artifact contendo a Publicação
+        uses: actions/download-artifact@v2.0.8
+        with:
+          name: ${{ env.NOME_ARTIFACT_PUBLICACAO }}
+          path: ${{ env.NOME_DIR_PUBLICACAO }}
+    
+      - name: Login no Azure
+        uses: Azure/login@v1.1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_WEBAPP_TESTES }}
+
+      - name: Deployment no Azure App Service (Ambiente de Testes)
+        uses: Azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.NOME_WEBAPP_TESTES_AZURE }}
+          package: ${{ env.NOME_DIR_PUBLICACAO }}
+
+  tests-api:
+    needs: [deployment-api-test-env]
+
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+        
+      - name: Executar testes automatizados
+        run: dotnet test ${{ env.CAMINHO_PROJETO_TESTES }} --verbosity minimal
+
+  deployment-api-prod-env:
+    needs: [tests-api]
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download do Artifact contendo a Publicação
+        uses: actions/download-artifact@v2.0.8
+        with:
+          name: ${{ env.NOME_ARTIFACT_PUBLICACAO }}
+          path: ${{ env.NOME_DIR_PUBLICACAO }}
+    
+      - name: Login no Azure
+        uses: Azure/login@v1.1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_WEBAPP_PRODUCAO }}
+
+      - name: Deployment no Azure App Service (Ambiente de Produção)
+        uses: Azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.NOME_WEBAPP_PRODUCAO_AZURE }}
+          package: ${{ env.NOME_DIR_PUBLICACAO }}
