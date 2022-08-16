@@ -28,6 +28,12 @@ namespace MeuTodo.Controllers
         ///       "name": "Naruto",
         ///       "Password": "Lamem"        
         ///     }
+        /// or
+        ///     [POST] api/auth/login
+        ///     {
+        ///         "name": "Sakura",
+        ///         "Password": "Sasuke" 
+        ///     }    
         /// </remarks>
         [HttpPost("login")]
         [Produces("application/json")]
