@@ -1,57 +1,94 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
-name: Build and deploy ASP.Net Core app to Azure Web App - deploy-azure
+name: .NET 6 + Testes de API REST + Artifacts + Azure App Service 
 
 on:
   push:
-    branches:
-      - master
-  workflow_dispatch:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  CAMINHO_PROJETO_WEBAPP: ./src
+  CAMINHO_PROJETO_TESTES: ./Tests/Tests.csproj
+  NOME_DIR_PUBLICACAO: app
+  NOME_ARTIFACT_PUBLICACAO: Publicacao PrimeiroDeploy
+  NOME_WEBAPP_PRODUCAO_AZURE: jamesapideploy
+  NOME_WEBAPP_TESTES_AZURE: jamesapideploytestes
+  UrlWebAppTestes: https://jamesapideploytestes.azurewebsites.net
 
 jobs:
-  build:
+  build-api:
     runs-on: windows-latest
 
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup .NET 6
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+
+    - name: Build + Publish com o utilitario dotnet
+      run: dotnet publish ${{ env.CAMINHO_PROJETO_WEBAPP }} -c Release -o ${{ env.NOME_DIR_PUBLICACAO }}
+
+    - name: Upload da Publicação como Artifact
+      uses: actions/upload-artifact@v2.2.2
+      with:
+        name: ${{ env.NOME_ARTIFACT_PUBLICACAO }}
+        path: ${{ env.NOME_DIR_PUBLICACAO }}
+
+  deployment-api-test-env:
+    needs: [build-api]
+
+    runs-on: windows-latest
+
+    steps:
+      - name: Download do Artifact contendo a Publicação
+        uses: actions/download-artifact@v2.0.8
+        with:
+          name: ${{ env.NOME_ARTIFACT_PUBLICACAO }}
+          path: ${{ env.NOME_DIR_PUBLICACAO }}
+    
+      - name: Login no Azure
+        uses: Azure/login@v1.1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_WEBAPP_TESTES }}
+
+      - name: Deployment no Azure App Service (Ambiente de Testes)
+        uses: Azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.NOME_WEBAPP_TESTES_AZURE }}
+          package: ${{ env.NOME_DIR_PUBLICACAO }}
+
+  tests-api:
+    needs: [deployment-api-test-env]
+
+    runs-on: windows-latest
+    
     steps:
       - uses: actions/checkout@v2
+        
+      - name: Executar testes automatizados
+        run: dotnet test ${{ env.CAMINHO_PROJETO_TESTES }} --verbosity minimal
 
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '6.0.x'
-          include-prerelease: true
+  deployment-api-prod-env:
+    needs: [tests-api]
 
-      - name: Build with dotnet
-        run: dotnet build ./src --configuration Release
-
-      - name: dotnet publish
-        run: dotnet publish ./src -c Release -o ${{env.DOTNET_ROOT}}/myapp
-
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
-        with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
-
-  deploy:
     runs-on: windows-latest
-    needs: build
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v2
+      - name: Download do Artifact contendo a Publicação
+        uses: actions/download-artifact@v2.0.8
         with:
-          name: .net-app
+          name: ${{ env.NOME_ARTIFACT_PUBLICACAO }}
+          path: ${{ env.NOME_DIR_PUBLICACAO }}
+    
+      - name: Login no Azure
+        uses: Azure/login@v1.1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_WEBAPP_PRODUCAO }}
 
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
+      - name: Deployment no Azure App Service (Ambiente de Produção)
+        uses: Azure/webapps-deploy@v2
         with:
-          app-name: 'deploy-azure'
-          slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_6AD25F85412844B2B6D910A238FF7464 }}
-          package: .
+          app-name: ${{ env.NOME_WEBAPP_PRODUCAO_AZURE }}
+          package: ${{ env.NOME_DIR_PUBLICACAO }}
