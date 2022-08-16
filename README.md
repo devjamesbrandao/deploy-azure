@@ -3,6 +3,14 @@
 <hr/>
 
 <p align="center">
+    <img src="/src/img/swagger.png" alt="Swagger da aplicação no Azure" title="Swagger da aplicação no Azure">
+</p> 
+
+<p align="center">
+    <img src="/src/img/Pipeline.png" alt="WorkFlow da aplicação com o GitHub Actions" title="WorkFlow da aplicação com o GitHub Actions">
+</p> 
+
+<p align="center">
     <a href="https://blog.bitsrc.io/using-github-actions-with-azure-app-services-for-web-apps-1d3333c391d4"><img src="/src/img/fluxo.png" alt="Fluxo de desenvolvimento e de deploy" title="Fluxo de desenvolvimento e de deploy"></a>
 </p> 
 
